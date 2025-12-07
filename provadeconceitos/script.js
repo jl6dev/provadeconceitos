@@ -1,72 +1,85 @@
+
 const display = document.getElementById("display");
-const buttons = document.querySelectorAll(".btn");
 const historyList = document.getElementById("history-list");
 
 let current = "";
-let operator = "";
 let previous = "";
-
-buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const value = btn.getAttribute("data-value");
-
-        if (value) {
-            current += value;
-            updateDisplay(current);
-        }
-    });
-});
+let operator = null;
 
 
-document.getElementById("clear").addEventListener("click", () => {
-    current = "";
-    previous = "";
-    operator = "";
-    updateDisplay("0");
-});
+function updateDisplay(v) {
+    display.textContent = v;
+}
 
 
-document.querySelectorAll(".op").forEach(opBtn => {
-    opBtn.addEventListener("click", () => {
-        if (current === "") return;
-        previous = current;
-        operator = opBtn.getAttribute("data-value");
-        current = "";
-    });
-});
+function addHistory(op, result) {
+    const li = document.createElement("li");
+    li.textContent = `${op} = ${result}`;
+    li.onclick = () => {
+        current = String(result);
+        updateDisplay(current);
+    };
+    historyList.prepend(li);
+}
 
 
-document.getElementById("equals").addEventListener("click", () => {
-    if (previous === "" || current === "" || operator === "") return;
+function calculate() {
+    if (!operator || current === "" || previous === "") return;
 
     const a = parseFloat(previous);
     const b = parseFloat(current);
-    let result = 0;
+    let result;
 
-    switch(operator) {
+    switch (operator) {
         case "+": result = a + b; break;
         case "-": result = a - b; break;
         case "*": result = a * b; break;
-        case "/":
-            result = b !== 0 ? a / b : "Erro";
-            break;
+        case "/": result = b === 0 ? "Erro" : a / b; break;
     }
 
+    addHistory(`${previous} ${operator} ${current}`, result);
     updateDisplay(result);
-    addToHistory(`${previous} ${operator} ${current} = ${result}`);
 
-    current = result.toString();
+    current = String(result);
     previous = "";
-    operator = "";
+    operator = null;
+}
+
+
+function inputNumber(n) {
+    if (n === "." && current.includes(".")) return;
+    current += n;
+    updateDisplay(current);
+}
+
+
+function inputOperator(op) {
+    if (current === "") return;
+    if (previous !== "") calculate();
+    previous = current;
+    operator = op;
+    current = "";
+}
+
+
+document.getElementById("clear").onclick = () => {
+    current = "";
+    previous = "";
+    operator = null;
+    updateDisplay("0");
+};
+
+
+document.getElementById("equals").onclick = () => calculate();
+
+
+document.querySelectorAll("button[data-value]").forEach(btn => {
+    btn.onclick = () => {
+        const v = btn.dataset.value;
+        if (!isNaN(v) || v === ".") inputNumber(v);
+        else inputOperator(v);
+    };
 });
 
 
-function updateDisplay(value) {
-    display.textContent = value;
-}
-
-function addToHistory(entry) {
-    const li = document.createElement("li");
-    li.textContent = entry;
-    historyList.appendChild(li);
-}
+updateDisplay("0");
