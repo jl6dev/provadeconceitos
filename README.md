@@ -13,16 +13,6 @@ Multiplicação (×)
 
 Divisão (÷)
 
-🖥️ Interface Gráfica
-
-Layout inspirado na Casio FX‑82
-
-Tela LCD em verde
-
-Botões com cores semelhantes ao modelo original
-
-Corpo estreito e alto, seguindo o padrão Casio
-
 📜 Histórico de Operações
 
 Lista de cálculos exibida ao lado da calculadora
