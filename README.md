@@ -47,15 +47,3 @@ RF3: 100% cliques nos botões
 RF4: Lógica via JavaScript puro
 
 RF5: Histórico exibido e funcional
-
-✔ Requisitos Não Funcionais (RNF)
-
-RNF1: Arquivos separados
-
-RNF2: Design limpo e funcional
-
-RNF3: Funciona em qualquer navegador moderno
-
-D3: Histórico interativo
-
-D1 parcialmente: tratamento básico de entradas inválidas
